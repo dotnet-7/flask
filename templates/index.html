@@ -4,11 +4,12 @@
     <title>Socket.IO Example</title>
 
     <style type="text/css">
-        body, html {
-          height: 100%;
+        html, body {
+          width: 1400px;
+          height: 600px;
           margin: 0;
+          padding: 0;
         }
-
         .container {
           min-height: 100%;
           position: relative;
@@ -36,11 +37,11 @@
            overflow: auto; /* 显示滚动条 */
         }
         .bottom-bar {
-          position: absolute;
-          bottom: 5%;
+          position: relative;
+
           left: 0;
           width: 100%;
-          padding: 10px;
+
           background-color: #f1f1f1;
         }
         .right {
@@ -58,8 +59,10 @@
 
 
     <div class="container">
-        <div class="top-bar">
-        <input type="text" id="message" />
+
+        <div class="top-bar" id ="tb">
+             <p>{{ content | safe }}</p>
+
 
 
     </div>
@@ -67,11 +70,12 @@
 
     </div>
       <div class="bottom-bar">
-
+        <input type="text" id="message" onkeydown="handleKeyDown(event)"/>
         <button id="sendButton">Send Message</button>
       </div>
 
     <script type="text/javascript">
+
 
     function extractUrls(str) {
       var urlRegex = /(https?:\/\/[^\s]+)/g;  // 匹配以 http:// 或 https:// 开头的链接
@@ -102,15 +106,40 @@
         //document.body.appendChild(messageElement);
         var container = document.querySelector('.top-bar');
         container.appendChild(messageElement);
-
+        var img = document.createElement('img');
+        img.style.height = '150px';
+        img.style.width = 'auto';
+        if(data.message.indexOf('原神，启动') !== -1){
+            img.src = 'https://img.139y.com/m01/30/a1/e3c80812c922b6c56720f4057c05a102.png';
+            container.appendChild(img);
+        }
 
           //var editor = document.querySelector('.editor');
            //editor.textContent += '\n' + data.message;
     });
 
-    document.getElementById('sendButton').addEventListener('click', function() {
+    function handleKeyDown(event) {
+      if (event.keyCode === 13) { // 判断键码是否为回车键的键码（keyCode）
+        event.preventDefault(); // 阻止默认的回车键行为（如提交表单）
+
+        // 在这里编写回车键被按下时要执行的操作
+        console.log("回车键被按下");
+        sendmessage();
+      }
+    }
+
+    function sendmessage(){
+        var container = document.getElementById("tb");
+        container.scrollTop = container.scrollHeight - container.clientHeight;
         var message = document.getElementById('message').value;
+        // 或者调用其他函数
         socket.emit('message', { 'message': name +':'+ message });
+        document.getElementById('message').value = '';
+
+    }
+
+    document.getElementById('sendButton').addEventListener('click', function() {
+        sendmessage();
     });
     </script>
 </body>
