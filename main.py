@@ -40,4 +40,4 @@ def handle_message(data):
     # 广播消息给该房间的所有客户端
     emit('message', {'message':message}, room=0)
 if __name__ == '__main__':
-    socketio.run(app,host=
+    socketio.run(app,host='0.0.0.0', port=80,allow_unsafe_werkzeug=True)
