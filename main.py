@@ -7,7 +7,7 @@ socketio = SocketIO(app)
 
 @app.route('/')
 def index():
-    file = open('file.txt', "r", encoding="utf-8")
+    file = open('./src/file.txt', "r", encoding="utf-8")
     content = file.read()
     content_html = content.replace('\n', '<br><br>')
     return render_template('index.html',content = content_html)
@@ -32,7 +32,7 @@ def handle_message(data):
     print('Message received: ' + message)
     # 定义 CSV 文件路径和文件名
     # 定义文本文件路径和文件名
-    txt_file_path = 'file.txt'
+    txt_file_path = './src/file.txt'
     message = time.strftime("%m/%d %H:%M ", time.localtime())+message
     # 写入数据到文本文件
     file = open(txt_file_path, "a", encoding="utf-8")
@@ -40,4 +40,4 @@ def handle_message(data):
     # 广播消息给该房间的所有客户端
     emit('message', {'message':message}, room=0)
 if __name__ == '__main__':
-    socketio.run(app,host='0.0.0.0', port=80,allow_unsafe_werkzeug=True)
+    socketio.run(app,host='0.0.0.0',port = 5000,allow_unsafe_werkzeug=True)
